@@ -24,7 +24,7 @@ WEIGHTS_DIR = Path(os.environ.get(
     "CHRONOS_MPC_WEIGHTS", Path(__file__).resolve().parent.parent / "Masters-Forecasting"))
 FINETUNED_DIR = WEIGHTS_DIR / "chronos-2-mpc-finetuned-final"
 
-HF_REPO_ENV = "CHRONOS_MPC_FT_REPO"     # Hub fallback when the local folder is missing
+HF_REPO = "Imker0311/chronos-2-cstr-mpc-lora"   # Hub fallback when the local folder is missing
 BATCH_SIZE = 256                        # >= n_candidates keeps a solve to one pass
 # ====================================================================
 
@@ -44,7 +44,7 @@ def resolve_checkpoint(finetuned=True):
     if FINETUNED_DIR.is_dir():
         return str(FINETUNED_DIR)
     from huggingface_hub import snapshot_download
-    return snapshot_download(repo_id=os.environ[HF_REPO_ENV], repo_type="model")
+    return snapshot_download(repo_id=HF_REPO, repo_type="model")
 
 
 def get_pipeline(finetuned=True):

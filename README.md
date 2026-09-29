@@ -130,9 +130,10 @@ valves were on PI loops; here they are the decision variables, so a fine-tune wi
 would be blind to the only thing the controller can do.
 
 **Weights** go to `Masters-Forecasting/chronos-2-mpc-finetuned-final/` (gitignored). To load
-them from another machine: create a write token at huggingface.co/settings/tokens, run
-`hf auth login`, set `CHRONOS_MPC_FT_REPO`, and rerun `finetune_chronos_mpc.py`. The script
-creates the repo itself.
+them from another machine, `chronos_forecaster.py` falls back to the private Hub repo
+`HF_REPO` (`Imker0311/chronos-2-cstr-mpc-lora`); run `hf auth login` once per machine. To
+upload new weights, set `PUSH_TO_HUB = True` in `finetune_chronos_mpc.py`, or upload the
+folder directly with `hf upload`.
 
 ## Results
 

@@ -8,8 +8,6 @@ MPC deploys at rather than at the model's maxima.
     python finetune_chronos_mpc.py
 """
 
-import os
-
 import torch
 from chronos import Chronos2Pipeline
 from chronos.chronos2.preprocess import from_data_frame
@@ -31,6 +29,7 @@ BATCH_SIZE = 128
 
 OUTPUT_DIR = CF.WEIGHTS_DIR / "chronos-2-mpc-finetuned"        # training checkpoints
 SAVE_DIR = CF.FINETUNED_DIR                                    # the one to load
+PUSH_TO_HUB = False         # upload SAVE_DIR to CF.HF_REPO after training (needs hf auth login)
 # ====================================================================
 
 
@@ -45,10 +44,10 @@ def build_inputs():
 
 
 def push():
-    """Upload to the Hub. Needs a write token (hf auth login) and CHRONOS_MPC_FT_REPO set."""
+    """Upload to the Hub. Needs a write token (hf auth login)."""
     from huggingface_hub import HfApi
 
-    repo = os.environ[CF.HF_REPO_ENV]
+    repo = CF.HF_REPO
     api = HfApi()
     api.create_repo(repo_id=repo, repo_type="model", private=True, exist_ok=True)
     api.upload_folder(folder_path=str(SAVE_DIR), repo_id=repo, repo_type="model",
@@ -67,7 +66,7 @@ def main():
         output_dir=str(OUTPUT_DIR), finetuned_ckpt_name="finetuned-ckpt")
     finetuned.save_pretrained(str(SAVE_DIR))
 
-    if os.environ.get(CF.HF_REPO_ENV):
+    if PUSH_TO_HUB:
         push()
 
 
