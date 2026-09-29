@@ -84,7 +84,6 @@ def timeseries(t, U, Z, D, dnames, active, window=None, name="context_timeseries
     axes[0].set_title(title, color=INK, fontsize=12, loc="left", pad=22)
     path = os.path.join(OUT_DIR, f"{name}.png")
     fig.savefig(path, dpi=130, facecolor=SURFACE, bbox_inches="tight")
-    print("wrote", path)
 
 
 def coverage(U, Z):
@@ -112,7 +111,6 @@ def coverage(U, Z):
 
     fig.tight_layout()
     fig.savefig(os.path.join(OUT_DIR, "context_coverage.png"), dpi=130, facecolor=SURFACE)
-    print("wrote", os.path.join(OUT_DIR, "context_coverage.png"))
 
 
 def main():
@@ -123,10 +121,8 @@ def main():
         D = np.column_stack([f[n][:, 0] for n in DISTURBANCES])
     with h5py.File(os.path.join(OUT_DIR, "CSTR_ContextEvents.h5"), "r") as f:
         active = np.sum([f[f"{n}_active"][:, 0] for n in DISTURBANCES], axis=0)
-    dnames = DISTURBANCES
-
-    timeseries(t, U, Z, D, dnames, active)
-    timeseries(t, U, Z, D, dnames, active, window=(0, 60), name="context_zoom")
+    timeseries(t, U, Z, D, DISTURBANCES, active)
+    timeseries(t, U, Z, D, DISTURBANCES, active, window=(0, 60), name="context_zoom")
     coverage(U, Z)
 
 

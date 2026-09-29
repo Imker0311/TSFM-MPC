@@ -1,0 +1,29 @@
+# Environment for the CSTR MPC project. Python 3.13.
+#
+# Recreate with:
+#   conda create -p .\envs python=3.13 -y
+#   .\envs\python.exe -m pip install torch --index-url https://download.pytorch.org/whl/cu128
+#   .\envs\python.exe -m pip install -r requirements.txt
+#
+# torch must come from the CUDA index first, otherwise pip installs the CPU build and the
+# closed loop runs ~100x slower.
+
+numpy>=2.5
+pandas>=2.3
+scipy>=1.18
+matplotlib>=3.11
+h5py>=3.16
+
+torch>=2.11
+transformers>=5.16
+huggingface_hub>=1.30
+accelerate>=1.14
+
+# Chronos-2: the fine-tuned internal model. peft is needed to load the LoRA adapter.
+chronos-forecasting>=2.3.1
+peft>=0.20
+
+# TimesFM-3: the zero-shot internal model. --no-deps because its pins conflict with the
+# Chronos stack and it only needs torch, which is already here.
+#   .\envs\python.exe -m pip install timesfm==3.0.2 --no-deps
+# timesfm==3.0.2
